@@ -1,0 +1,4 @@
+method,params_m,macs_g,input_size,device,iters,fps,latency_mean_ms,latency_std_ms,latency_p95_ms,status,error
+PraNet,32.55,13.15,352,cuda,200,53.4,18.71,2.08,22.06,,
+Polyp-PVT,25.11,10.02,352,cuda,200,54.9,18.21,1.9,22.36,,
+HarDNet-MSEG,33.34,11.4,352,cuda,200,61.8,16.18,3.26,23.05,,

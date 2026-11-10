@@ -1,0 +1,82 @@
+# =============================================================================
+# Default configuration for: Lightweight Boundary-Aware Transformer-CNN
+# Hybrid Network for Real-Time Polyp Segmentation
+#
+# Training protocol follows the PraNet standard:
+#   train: Kvasir-SEG (1000) + CVC-ClinicDB (612)
+#   test : CVC-300 (60) + CVC-ColonDB (380) + ETIS-Larib (196)
+#          + Kvasir-SEG + CVC-ClinicDB
+# =============================================================================
+
+model:
+  name: LightPolySegNet
+  image_size: 352
+
+  # ---- Lightweight hybrid encoder (CNN stem + MobileViT-style blocks) ----
+  stem_channels: 16            # 3x3 conv, stride 2  -> 176x176
+  # Encoder stage output channels (stride 4 / 8 / 16 / 32)
+  stage_channels: [32, 56, 112, 176]
+  # Number of MobileNetV2 inverted-residual blocks per stage (stage1..4)
+  mv2_blocks: [1, 2, 2, 2]
+  # Transformer branch dims for stages 2..4 (stage 1 is pure CNN)
+  tf_dims: [72, 128, 176]
+  # Transformer block depths for stages 2..4
+  tf_depths: [2, 2, 2]
+  # Patch size (in feature-map cells) for the ViT branch
+  tf_patch_size: 2
+
+  # ---- Boundary-aware lightweight decoder ----
+  decoder_channels: [96, 56, 32]   # fused channels at 1/16, 1/8, 1/4 (deep->shallow)
+  use_boundary_head: true          # auxiliary boundary map head
+
+data:
+  # Color-domain augmentation (v2): HSV jitter + brightness/contrast jitter +
+  # random gamma, p=0.5, train mode only. Targets the cross-domain color gap
+  # (ETIS / CVC-ColonDB). Set to false for the ablation (configs/ablation_no_color.yaml).
+  aug_color: true
+
+train:
+  # ---- Data ----
+  data_root: data/TrainDataset     # contains images/ and masks/
+  image_size: 352
+  val_split: 0.1                   # fraction held out for model selection.
+                                   # For the FINAL paper run use 0.0 (train on all
+                                   # 1612 images, PraNet protocol) and keep the
+                                   # last checkpoint as the final model.
+
+  # ---- Optimization ----
+  epochs: 100
+  batch_size: 8                    # fits a free Colab T4 (16GB) at 352x352
+  lr: 1.0e-4
+  weight_decay: 1.0e-4
+  optimizer: adamw
+  scheduler: cosine                # cosine annealing to lr_min
+  lr_min: 1.0e-6
+  warmup_epochs: 2
+  amp: true                        # mixed precision on GPU (ignored on CPU)
+  num_workers: 2                   # Colab: 2 is safe; increase locally if RAM allows
+  grad_clip: 1.0
+  seed: 42
+
+  # ---- Loss weights ----
+  w_bce: 1.0                       # BCE on main segmentation head
+  w_iou: 1.0                       # soft IoU on main segmentation head
+  w_boundary: 0.5                  # BCE + Dice on boundary head (boundary GT from
+                                   # morphological gradient of the GT mask)
+  w_aux: 0.4                       # deep supervision on auxiliary seg maps
+                                   # (weight halved at each coarser level)
+
+  # ---- Logging / checkpointing ----
+  out_dir: runs/exp1
+  log_every: 20                    # steps between console logs
+  save_every: 5                    # epochs between periodic snapshots
+
+test:
+  data_root: data/TestDataset      # folder with one sub-dataset per test set
+  datasets:                        # paper table order
+    - CVC-300
+    - CVC-ColonDB
+    - ETIS-Larib
+    - Kvasir-SEG
+    - CVC-ClinicDB
+  threshold: 0.5

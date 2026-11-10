@@ -1,0 +1,66 @@
+model:
+  name: LightPolySegNet
+  image_size: 352
+  pretrained: true
+  vit_style: timm
+  stem_channels: 16
+  stage_channels:
+  - 24
+  - 48
+  - 64
+  - 80
+  mv2_blocks:
+  - 3
+  - 1
+  - 1
+  - 1
+  mv2_expand: 2
+  tf_dims:
+  - 64
+  - 80
+  - 96
+  tf_depths:
+  - 2
+  - 4
+  - 3
+  tf_patch_size: 2
+  tf_mlp_ratio: 2.0
+  decoder_channels:
+  - 96
+  - 56
+  - 32
+  use_boundary_head: true
+data:
+  aug_color: true
+train:
+  data_root: data/TrainDataset
+  image_size: 352
+  val_split: 0.1
+  epochs: 100
+  batch_size: 8
+  lr: 0.0001
+  weight_decay: 0.0001
+  optimizer: adamw
+  scheduler: cosine
+  lr_min: 1.0e-06
+  warmup_epochs: 2
+  amp: true
+  num_workers: 2
+  grad_clip: 1.0
+  seed: 43
+  w_bce: 1.0
+  w_iou: 1.0
+  w_boundary: 0.0
+  w_aux: 0.4
+  out_dir: runs/exp4
+  log_every: 20
+  save_every: 5
+test:
+  data_root: data/TestDataset
+  datasets:
+  - CVC-300
+  - CVC-ColonDB
+  - ETIS-Larib
+  - Kvasir-SEG
+  - CVC-ClinicDB
+  threshold: 0.5
