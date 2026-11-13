@@ -1,6 +1,6 @@
 # LightPolySegNet — Lightweight Transformer–CNN Hybrid for Real-Time Polyp Segmentation
 
-Official code for **"A Lightweight Transformer–CNN Hybrid Network for Real-Time Polyp Segmentation in Colonoscopy"** (Chao Hu, Eulji University), under review at the *Journal of Real-Time Image Processing* (Springer).
+Official code for **"A Lightweight Transformer–CNN Hybrid Network for Real-Time Polyp Segmentation in Colonoscopy"** (Chao Hu, Eulji University).
 
 **Headline:** a **0.97 M**-parameter Transformer–CNN hybrid whose encoder is weight-compatible with timm's `mobilevit_xxs`, so ImageNet pretraining transfers directly. On the standard, hash-verified **1,450/798** PraNet protocol it reaches **0.8190 ± 0.0054** mean mDice over three seeds (**+1.8** over PraNet, **+1.8** over FANet re-trained under the identical protocol) at **65× lower per-forward compute**, running at **111.6 FPS** on a Tesla T4 — while FANet's official ten-pass feedback protocol yields 3.4 FPS.
 
