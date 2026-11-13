@@ -1,0 +1,2 @@
+method,config,device,params_m,macs_g_thop,macs_g_flop_counter,fps,latency_mean_ms,latency_std_ms,latency_p95_ms,iters,fps_fp16,latency_fp16_mean_ms
+LightPolySegNet,configs/exp8_combo.yaml,cuda,0.97,0.69,0.58,111.6,10.74,2.52,15.69,300,59.9,16.07

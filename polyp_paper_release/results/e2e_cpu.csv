@@ -1,0 +1,6 @@
+method,params_m,macs_g,input_size,device,fps,latency_mean_ms,latency_std_ms,latency_p95_ms,e2e,platform
+LightPolySegNet(R8),0.97,0.69,352,cpu,14.5,69.06,1.59,71.36,True,"AMD Ryzen (Family 25 Model 80), 16 threads"
+FANet,7.74,44.79,352,cpu,1.8,567.86,21.95,594.97,True,"AMD Ryzen (Family 25 Model 80), 16 threads"
+PraNet,32.55,13.15,352,cpu,4.7,212.46,9.36,225.44,True,"AMD Ryzen (Family 25 Model 80), 16 threads"
+HarDNet-MSEG,33.34,11.4,352,cpu,6.5,153.14,8.34,163.99,True,"AMD Ryzen (Family 25 Model 80), 16 threads"
+Polyp-PVT,25.11,10.02,352,cpu,3.5,286.4,5.77,294.4,True,"AMD Ryzen (Family 25 Model 80), 16 threads"

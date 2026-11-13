@@ -1,0 +1,5 @@
+method,params_m,macs_g,input_size,device,iters,fps,latency_mean_ms,latency_std_ms,latency_p95_ms,e2e,fps_10iter,latency10_mean_ms,platform,status,error
+PraNet,32.55,13.15,352,cuda,300,34.2,29.21,5.38,40.1,,,,"{'cpu': 'x86_64', 'threads': 2, 'gpu': 'Tesla T4'}",,
+Polyp-PVT,25.11,10.02,352,cuda,300,34.8,28.72,4.67,38.52,,,,"{'cpu': 'x86_64', 'threads': 2, 'gpu': 'Tesla T4'}",,
+HarDNet-MSEG,33.34,11.4,352,cuda,300,48.4,20.67,2.01,24.75,,,,"{'cpu': 'x86_64', 'threads': 2, 'gpu': 'Tesla T4'}",,
+fanet,,,,,,,,,,,,,,FAILED,"RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cuda:0 and cpu!"
